@@ -1,0 +1,6 @@
+{
+  "name": "Ecosphere Core Brand Blueprint",
+  "description": "An immersive luxury sustainability brand manual showcasing EcoSphere Group's design philosophy, identity systems, premium assets, and brand guidelines.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
