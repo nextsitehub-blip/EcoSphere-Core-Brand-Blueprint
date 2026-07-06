@@ -27,6 +27,26 @@ interface Chapter {
 export default function BrandManualPortal({ onClose, initialChapter }: { onClose: () => void; initialChapter?: string }) {
   const [activeChapter, setActiveChapter] = useState(initialChapter || 'blueprint');
   const [copiedToken, setCopiedToken] = useState<string | null>(null);
+  const [toastMsg, setToastMsg] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (initialChapter) {
+      setActiveChapter(initialChapter);
+    }
+  }, [initialChapter]);
+
+  useEffect(() => {
+    const handleToast = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      if (customEvent.detail && customEvent.detail.message) {
+        setToastMsg(customEvent.detail.message);
+        const timer = setTimeout(() => setToastMsg(null), 3500);
+        return () => clearTimeout(timer);
+      }
+    };
+    window.addEventListener('brand-portal-toast', handleToast);
+    return () => window.removeEventListener('brand-portal-toast', handleToast);
+  }, []);
   
   // Chapter Categories definitions
   const chapters: Chapter[] = [
@@ -70,25 +90,25 @@ export default function BrandManualPortal({ onClose, initialChapter }: { onClose
     <div className="min-h-screen bg-brand-dark-bg text-brand-ivory flex flex-col noise-bg selection:bg-brand-gold selection:text-brand-forest relative z-[55]">
       
       {/* Top Bar Status / Navigation */}
-      <header className="sticky top-0 bg-brand-dark-bg/90 backdrop-blur-md border-b border-white/10 px-6 py-4 flex items-center justify-between z-30">
-        <div className="flex items-center gap-4">
-          <div className="relative w-8 h-8 flex items-center justify-center rounded-full bg-brand-forest border border-brand-gold/30">
+      <header className="sticky top-0 bg-brand-dark-bg/90 backdrop-blur-md border-b border-white/10 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between z-30">
+        <div className="flex items-center gap-3 sm:gap-4">
+          <div className="relative w-8 h-8 flex items-center justify-center rounded-full bg-brand-forest border border-brand-gold/30 shrink-0">
             <svg viewBox="0 0 100 100" className="w-4 h-4 fill-none stroke-brand-gold" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round">
               <path d="M 50,50 A 20,20 0 1,1 30,50 A 10,10 0 1,1 40,50 A 5,5 0 1,1 45,50" />
             </svg>
           </div>
           <div className="flex flex-col">
-            <span className="font-display font-semibold text-xs tracking-[0.15em] uppercase text-brand-ivory">
-              ECOSPHERE // BRAND PORTAL
+            <span className="font-display font-semibold text-[10px] sm:text-xs tracking-[0.12em] sm:tracking-[0.15em] uppercase text-brand-ivory truncate max-w-[130px] sm:max-w-none">
+              ECOSPHERE <span className="hidden xs:inline">// BRAND PORTAL</span>
             </span>
-            <span className="font-mono text-[8px] tracking-widest text-brand-gold uppercase">
-              SPEC_V1.04 // SECURE_ACCESS_GRANTED
+            <span className="font-mono text-[7px] sm:text-[8px] tracking-widest text-brand-gold uppercase truncate max-w-[130px] sm:max-w-none">
+              SPEC_V1.04 // SECURE
             </span>
           </div>
         </div>
 
         {/* System Active Tag & Close */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-3 sm:gap-6">
           <div className="hidden md:flex items-center gap-2 px-3 py-1 bg-white/[0.02] border border-white/10 rounded-full">
             <span className="w-1.5 h-1.5 rounded-full bg-brand-gold animate-pulse" />
             <span className="font-mono text-[8px] tracking-widest text-brand-sage-light">SYS_ACTIVE_MEMBER</span>
@@ -96,9 +116,10 @@ export default function BrandManualPortal({ onClose, initialChapter }: { onClose
 
           <button
             onClick={onClose}
-            className="px-4 py-2 border border-brand-gold/30 rounded-full hover:border-brand-gold bg-brand-forest/20 text-brand-gold text-[10px] font-mono tracking-widest uppercase hover:bg-brand-gold hover:text-brand-forest transition-smooth"
+            className="px-3 py-1.5 sm:px-4 sm:py-2 border border-brand-gold/30 rounded-full hover:border-brand-gold bg-brand-forest/20 text-brand-gold text-[9px] sm:text-[10px] font-mono tracking-widest uppercase hover:bg-brand-gold hover:text-brand-forest transition-smooth shrink-0"
           >
-            EXIT TO LANDING PAGE
+            <span className="sm:hidden">EXIT</span>
+            <span className="hidden sm:inline">EXIT TO LANDING PAGE</span>
           </button>
         </div>
       </header>
@@ -107,8 +128,8 @@ export default function BrandManualPortal({ onClose, initialChapter }: { onClose
       <div className="flex-1 flex flex-col lg:flex-row min-h-0 relative">
         
         {/* Left Drawer Navigation Selector */}
-        <aside className="lg:w-80 border-r border-white/10 bg-brand-dark-bg/40 flex flex-col lg:sticky lg:top-[69px] lg:h-[calc(100vh-69px)] overflow-y-auto no-scrollbar py-6">
-          <div className="px-6 pb-4 border-b border-white/5 mb-4">
+        <aside className="hidden lg:flex lg:w-80 border-r border-white/10 bg-brand-dark-bg/40 flex-col lg:sticky lg:top-[69px] lg:h-[calc(100vh-69px)] overflow-y-auto no-scrollbar py-6">
+          <div className="px-6 pb-4 border-b border-white/5 mb-4 shrink-0">
             <span className="font-mono text-[10px] text-brand-sage-light/50 tracking-[0.2em] uppercase font-semibold block">
               MANUAL DIRECTORY
             </span>
@@ -166,6 +187,29 @@ export default function BrandManualPortal({ onClose, initialChapter }: { onClose
             );
           })}
         </aside>
+
+        {/* Mobile Chapter Navigation Dropdown (Visible < lg only) */}
+        <div className="lg:hidden px-4 py-3 bg-brand-dark-bg border-b border-white/10 flex flex-col gap-1.5 z-25 shrink-0 relative">
+          <label className="font-mono text-[8px] uppercase tracking-[0.25em] text-brand-gold/70 block">
+            ACTIVE SPEC NODE // MOBILE BLUEPRINT NAV
+          </label>
+          <div className="relative">
+            <select
+              value={activeChapter}
+              onChange={(e) => setActiveChapter(e.target.value)}
+              className="w-full bg-white/[0.04] border border-white/15 rounded-xl px-4 py-2.5 text-xs font-sans tracking-wide text-brand-gold outline-none focus:border-brand-gold appearance-none cursor-pointer"
+            >
+              {chapters.map((c) => (
+                <option key={c.id} value={c.id} className="bg-brand-charcoal text-brand-ivory text-xs">
+                  {c.sectionNum} // {c.name.toUpperCase()}
+                </option>
+              ))}
+            </select>
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-brand-gold/70">
+              <ChevronRight className="w-4 h-4 rotate-90" />
+            </div>
+          </div>
+        </div>
 
         {/* Right Stage Content Panel */}
         <main className="flex-1 p-6 md:p-12 overflow-y-auto min-h-0 bg-gradient-to-br from-transparent to-brand-forest/10">
@@ -226,6 +270,24 @@ export default function BrandManualPortal({ onClose, initialChapter }: { onClose
           </AnimatePresence>
         </main>
       </div>
+
+      {/* Floating Status Toast */}
+      <AnimatePresence>
+        {toastMsg && (
+          <motion.div
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            className="fixed bottom-6 right-6 z-[100] px-6 py-4 bg-brand-forest/95 border border-brand-gold/30 rounded-2xl shadow-2xl flex items-center gap-3 backdrop-blur-md max-w-sm text-left"
+          >
+            <div className="w-2 h-2 rounded-full bg-brand-gold animate-ping shrink-0" />
+            <div className="flex flex-col gap-0.5">
+              <span className="font-mono text-[8px] text-brand-gold uppercase tracking-widest font-bold">SYSTEM EVENT RECORDED</span>
+              <span className="font-sans text-xs text-brand-ivory font-light leading-snug">{toastMsg}</span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -340,7 +402,7 @@ function PageBrandAssets({ onCopy, copiedToken }: { onCopy: (t: string, id: stri
         </p>
 
         {/* Theme selectors */}
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           {(['forest', 'ivory', 'emerald'] as const).map((t) => (
             <button
               key={t}
@@ -1278,7 +1340,7 @@ function PageCaseStudies() {
   return (
     <div className="space-y-8">
       {/* Category selectors */}
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         {(['all', 'Circular', 'Identity', 'Luxury'] as const).map((t) => (
           <button
             key={t}
@@ -1602,7 +1664,9 @@ function FAQAccordions() {
 
 // Dynamic Mock downloads helper function
 function handleDownload(fileName: string) {
-  alert(`DECRYPTING AND PACKAGING ${fileName.toUpperCase()} ASSET SUITE... DOWNLOAD READY.`);
+  window.dispatchEvent(new CustomEvent('brand-portal-toast', { 
+    detail: { message: `DECRYPTING AND PACKAGING ${fileName.toUpperCase()} ASSET SUITE... DOWNLOAD STARTED.` } 
+  }));
 }
 
 // 1. Interactive Grid system overlays visualizer

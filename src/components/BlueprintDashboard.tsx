@@ -107,7 +107,7 @@ export default function BlueprintDashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 bg-white/[0.02] border border-white/10 rounded-3xl backdrop-blur-md shadow-2xl box-glow" id="dashboard-window">
           
           {/* LEFT: Category Navigation Sidebar (4 Columns) */}
-          <div className="lg:col-span-4 border-r border-white/10 p-6 md:p-8 flex flex-col gap-6" id="dashboard-sidebar">
+          <div className="lg:col-span-4 lg:border-r border-b lg:border-b-0 border-white/10 p-6 md:p-8 flex flex-col gap-6" id="dashboard-sidebar">
             <div className="flex items-center gap-3 border-b border-white/10 pb-4">
               <Terminal className="w-4 h-4 text-brand-gold" />
               <span className="font-mono text-[10px] tracking-widest text-brand-ivory font-semibold uppercase">
@@ -145,6 +145,27 @@ export default function BlueprintDashboard() {
                   </button>
                 );
               })}
+            </div>
+
+            {/* Mobile Workspace Spec Launch Button */}
+            <div className="lg:hidden w-full mt-2">
+              <button
+                onClick={() => {
+                  const chapterMapping: { [key: string]: string } = {
+                    'grid': 'blueprint',
+                    'spacing': 'components',
+                    'vectors': 'vectors',
+                    'photography': 'photography',
+                    'print': 'packaging',
+                    'digital': 'components'
+                  };
+                  const chapterId = chapterMapping[activeCategory] || 'blueprint';
+                  window.dispatchEvent(new CustomEvent('open-brand-portal', { detail: { chapter: chapterId } }));
+                }}
+                className="w-full py-3 bg-brand-gold text-brand-forest border border-brand-gold hover:bg-brand-gold-bright text-[9px] tracking-[0.2em] uppercase font-mono transition-all duration-300 rounded-xl font-bold flex items-center justify-center gap-1.5 shadow-lg shadow-brand-gold/15"
+              >
+                <Maximize2 className="w-3.5 h-3.5" /> EXPLORE WORKSPACE (19 CHAPTERS)
+              </button>
             </div>
 
             {/* Quick specifications label block */}

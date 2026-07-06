@@ -102,7 +102,7 @@ export default function BrandJourneyCTA() {
 
           {/* Right Column: Interactive Intake Application Form (6 Columns) */}
           <div className="lg:col-span-6">
-            <div className="p-8 md:p-10 bg-white/[0.02] border border-white/10 backdrop-blur-md rounded-3xl relative box-glow" id="contact-form-container">
+            <div className="p-6 sm:p-8 md:p-10 bg-white/[0.02] border border-white/10 backdrop-blur-md rounded-3xl relative box-glow" id="contact-form-container">
 
               <AnimatePresence mode="wait">
                 {!formSubmitted ? (

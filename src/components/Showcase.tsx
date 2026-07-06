@@ -163,7 +163,7 @@ export default function Showcase() {
                 animate={{ x: 0 }}
                 exit={{ x: '100%' }}
                 transition={{ type: 'spring', damping: 26, stiffness: 170 }}
-                className="relative w-full max-w-2xl bg-brand-dark-bg border-l border-brand-gold/20 h-full overflow-y-auto no-scrollbar p-8 md:p-12 z-10 flex flex-col justify-between noise-bg"
+                className="relative w-full max-w-2xl bg-brand-dark-bg border-l border-brand-gold/20 h-full overflow-y-auto no-scrollbar p-6 sm:p-8 md:p-12 z-10 flex flex-col justify-between noise-bg"
                 id="showcase-detail-drawer"
               >
                 {/* Background blueprint elements */}
@@ -228,9 +228,9 @@ export default function Showcase() {
 
                         {/* Interactive dynamic elements based on specifications (e.g. SVG alignment or Code Snippets) */}
                         {asset.svgPreview && (
-                          <div className="mb-6 p-4 bg-brand-dark-bg border border-brand-gold/15 flex items-center justify-center">
-                            <div dangerouslySetInnerHTML={{ __html: asset.svgPreview }} />
-                            <div className="ml-6 flex flex-col font-mono text-[9px] text-brand-sage-light/60 gap-1.5 border-l border-brand-gold/10 pl-6">
+                          <div className="mb-6 p-4 bg-brand-dark-bg border border-brand-gold/15 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-0">
+                            <div dangerouslySetInnerHTML={{ __html: asset.svgPreview }} className="shrink-0" />
+                            <div className="sm:ml-6 flex flex-col font-mono text-[9px] text-brand-sage-light/60 gap-1.5 border-t sm:border-t-0 sm:border-l border-brand-gold/10 pt-4 sm:pt-0 sm:pl-6 w-full sm:w-auto text-center sm:text-left">
                               <span className="text-brand-gold">FIBONACCI RADIUS LOCK</span>
                               <span>CENTER_AXIS: X:50, Y:50</span>
                               <span>MATERIAL_PIGMENT: ORGANIC GOLD</span>
